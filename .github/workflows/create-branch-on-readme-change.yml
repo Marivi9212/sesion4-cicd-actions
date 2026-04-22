@@ -34,4 +34,5 @@ jobs:
           git push origin "$BRANCH_NAME"
 
       - name: Mostrar nombre de la rama creada
-        run: echo "Rama creada: readme-update-${GITHUB_SHA::7}"
+        run: |
+          echo "Rama creada: readme-update-${GITHUB_SHA::7}"
