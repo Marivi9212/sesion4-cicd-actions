@@ -1,0 +1,37 @@
+name: Crear rama cuando cambie README
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'README.md'
+
+permissions:
+  contents: write
+
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Crear y subir nueva rama
+        env:
+          SHA_SHORT: ${{ github.sha }}
+        run: |
+          BRANCH_NAME="readme-update-${SHA_SHORT::7}"
+          git switch -c "$BRANCH_NAME"
+          git push origin "$BRANCH_NAME"
+
+      - name: Mostrar nombre de la rama creada
+        run: echo "Rama creada: readme-update-${GITHUB_SHA::7}"
